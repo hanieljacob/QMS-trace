@@ -62,6 +62,16 @@ export function SerialView({ serialNumber }: { serialNumber: string }) {
           )}
         </div>
       </div>
+      <div className="viewbar">
+        <a
+          className="dl"
+          href={`/api/serials/${encodeURIComponent(tree.serial_number ?? serialNumber)}/dhr.pdf`}
+          target="_blank"
+          rel="noopener"
+        >
+          ⤓ Download Device History Record (PDF)
+        </a>
+      </div>
       <BuildTree root={tree} />
     </section>
   );

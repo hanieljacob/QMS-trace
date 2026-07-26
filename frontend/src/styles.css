@@ -251,6 +251,26 @@ body {
 }
 
 /* ---- Tree / grid ------------------------------------------------------ */
+.viewbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+.dl {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  color: var(--accent);
+  background: var(--bg);
+  text-decoration: none;
+}
+.dl:hover {
+  background: var(--row-hover);
+}
+
 .tree__toolbar {
   display: flex;
   gap: 8px;

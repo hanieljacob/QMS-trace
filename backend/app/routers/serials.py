@@ -4,12 +4,14 @@ from __future__ import annotations
 
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db
+from app.reports.dhr_pdf import render_dhr_pdf
 from app.schemas.views import SerialSummary, SerialTree, serial_tree
 from app.services import queries
+from app.services.dhr import build_dhr
 from app.services.genealogy import serial_genealogy
 
 router = APIRouter(tags=["serials"])
@@ -55,3 +57,29 @@ def get_serial_genealogy(
     except LookupError:
         raise HTTPException(status_code=404, detail=f"serial number not found: {serial_number}")
     return serial_tree(node)
+
+
+@router.get(
+    "/serials/{serial_number}/dhr.pdf",
+    summary="Download the Device History Record as a PDF",
+    description=(
+        "Generate the auditor-facing Device History Record for one serial: a "
+        "header (serial, part, work order, build date), the full as-built "
+        "genealogy, incoming inspection results with electronic signatures, and "
+        "nonconformances — with a generation timestamp and page numbers."
+    ),
+    responses={200: {"content": {"application/pdf": {}}, "description": "The DHR PDF."}},
+    response_class=Response,
+)
+def download_dhr(serial_number: str, db: Session = Depends(get_db)) -> Response:
+    try:
+        document = build_dhr(db, serial_number)
+    except LookupError:
+        raise HTTPException(status_code=404, detail=f"serial number not found: {serial_number}")
+    pdf = render_dhr_pdf(document)
+    filename = f"DHR_{serial_number}.pdf"
+    return Response(
+        content=pdf,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )

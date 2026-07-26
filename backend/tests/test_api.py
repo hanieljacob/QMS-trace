@@ -151,6 +151,26 @@ def test_signoff_missing_inspection(client):
 
 
 # --------------------------------------------------------------------------- #
+# Device History Record PDF
+# --------------------------------------------------------------------------- #
+
+def test_dhr_pdf_download(client):
+    r = client.get("/serials/SRA-0001/dhr.pdf")
+    assert r.status_code == 200
+    assert r.headers["content-type"] == "application/pdf"
+    assert 'filename="DHR_SRA-0001.pdf"' in r.headers["content-disposition"]
+    body = r.content
+    assert body[:4] == b"%PDF"          # a real PDF
+    assert body.rstrip().endswith(b"%%EOF")
+    assert len(body) > 5000             # not an empty stub
+
+
+def test_dhr_pdf_unknown_serial(client):
+    r = client.get("/serials/NOPE-9999/dhr.pdf")
+    assert r.status_code == 404
+
+
+# --------------------------------------------------------------------------- #
 # Audit trail
 # --------------------------------------------------------------------------- #
 

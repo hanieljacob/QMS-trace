@@ -3,3 +3,4 @@ SQLAlchemy>=2.0
 alembic>=1.13
 fastapi>=0.110
 uvicorn>=0.29
+reportlab>=4.0
