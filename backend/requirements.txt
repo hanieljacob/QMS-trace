@@ -1,0 +1,3 @@
+# qmstrace backend — kept intentionally minimal (see CLAUDE.md constraints)
+SQLAlchemy>=2.0
+alembic>=1.13
