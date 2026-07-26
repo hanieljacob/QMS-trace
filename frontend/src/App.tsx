@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { SerialSearch } from "./components/SerialSearch";
+import { Search } from "./components/Search";
 import { NavContext, type Nav, type Route } from "./nav";
 import { SerialView } from "./pages/SerialView";
 import { LotView } from "./pages/LotView";
@@ -28,7 +28,7 @@ export function App() {
     <NavContext.Provider value={nav}>
       <header className="topbar">
         <div className="topbar__brand">qmstrace</div>
-        <SerialSearch />
+        <Search />
         <div className="topbar__trail">
           {stack.map((r, i) => (
             <span key={i} className="crumb" data-current={i === stack.length - 1}>

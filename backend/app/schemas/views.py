@@ -205,6 +205,135 @@ class RecallScope(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
+# Lot search
+# --------------------------------------------------------------------------- #
+
+class LotSummary(BaseModel):
+    """One row in the supplier-lot search results, with quality flags."""
+
+    lot_number: str
+    part_number: Optional[str] = None
+    part_name: Optional[str] = None
+    supplier_name: Optional[str] = None
+    received_at: Optional[datetime.date] = None
+    inspection_disposition: Optional[str] = None
+    certificate_status: str
+    open_nc_count: int = 0
+
+    @classmethod
+    def from_hit(cls, hit) -> "LotSummary":
+        return cls(
+            lot_number=hit.lot_number,
+            part_number=hit.part_number,
+            part_name=hit.part_name,
+            supplier_name=hit.supplier_name,
+            received_at=hit.received_at,
+            inspection_disposition=hit.inspection_disposition,
+            certificate_status=hit.certificate_status,
+            open_nc_count=hit.open_nc_count,
+        )
+
+
+# --------------------------------------------------------------------------- #
+# Lot report (the lot view)
+# --------------------------------------------------------------------------- #
+
+class InspectionResultView(BaseModel):
+    inspected_at: Optional[datetime.datetime] = None
+    disposition: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class AffectedUnit(BaseModel):
+    """One consuming unit within a work-order group."""
+
+    serial_number: Optional[str] = None
+    part_number: Optional[str] = None
+    part_name: Optional[str] = None
+    built_at: Optional[datetime.datetime] = None
+    depth: int
+    direct: bool
+    status: str = Field(description="Current unit status: 'released', 'nc_open', or 'voided'.")
+    is_finished_device: bool
+
+
+class WorkOrderGroupView(BaseModel):
+    work_order_number: str
+    unit_count: int
+    units: list[AffectedUnit] = []
+
+
+class LotReport(BaseModel):
+    """Everything the lot view needs, in one response."""
+
+    lot_number: Optional[str] = None
+    part_number: Optional[str] = None
+    part_name: Optional[str] = None
+    supplier_name: Optional[str] = None
+    received_at: Optional[datetime.date] = None
+    quantity_received: Optional[Decimal] = None
+
+    # Quality context shown alongside the affected units.
+    certificate_status: str = Field(description="'present' or 'absent'")
+    certificate_references: list[str] = []
+    inspections: list[InspectionResultView] = []
+    nonconformances: list[NonconformanceView] = []
+
+    # Blast radius — the headline number.
+    blast_radius: int = Field(description="Total distinct units that consumed this lot at any depth.")
+    direct_consumers: int
+    finished_device_count: int
+    finished_devices: list[str] = []
+
+    work_order_groups: list[WorkOrderGroupView] = []
+
+    @classmethod
+    def from_report(cls, r) -> "LotReport":
+        return cls(
+            lot_number=r.lot_number,
+            part_number=r.part_number,
+            part_name=r.part_name,
+            supplier_name=r.supplier_name,
+            received_at=r.received_at,
+            quantity_received=r.quantity_received,
+            certificate_status=r.certificate_status,
+            certificate_references=r.certificate_references,
+            inspections=[
+                InspectionResultView(inspected_at=i.inspected_at, disposition=i.disposition, notes=i.notes)
+                for i in r.inspections
+            ],
+            nonconformances=[
+                NonconformanceView(nc_number=nc.nc_number, status=nc.status, description=nc.description)
+                for nc in r.nonconformances
+            ],
+            blast_radius=r.blast_radius,
+            direct_consumers=r.direct_consumers,
+            finished_device_count=r.finished_device_count,
+            finished_devices=r.finished_devices,
+            work_order_groups=[
+                WorkOrderGroupView(
+                    work_order_number=g.work_order_number,
+                    unit_count=g.unit_count,
+                    units=[
+                        AffectedUnit(
+                            serial_number=u.serial_number,
+                            part_number=u.part_number,
+                            part_name=u.part_name,
+                            built_at=u.built_at,
+                            depth=u.depth,
+                            direct=u.direct,
+                            status=u.status,
+                            is_finished_device=u.is_finished_device,
+                        )
+                        for u in g.units
+                    ],
+                )
+                for g in r.work_order_groups
+            ],
+        )
+
+
+# --------------------------------------------------------------------------- #
 # Nonconformance list
 # --------------------------------------------------------------------------- #
 

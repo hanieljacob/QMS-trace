@@ -1,4 +1,4 @@
-import type { RecallScope, SerialSummary, SerialTree } from "./types";
+import type { LotReport, LotSummary, SerialSummary, SerialTree } from "./types";
 
 const BASE = "/api";
 
@@ -38,7 +38,10 @@ export const api = {
   serialGenealogy(serialNumber: string): Promise<SerialTree> {
     return getJson(`/serials/${encodeURIComponent(serialNumber)}/genealogy`);
   },
-  recallScope(lotNumber: string): Promise<RecallScope> {
-    return getJson(`/lots/${encodeURIComponent(lotNumber)}/recall-scope`);
+  searchLots(q: string): Promise<LotSummary[]> {
+    return getJson(`/lots?q=${encodeURIComponent(q)}&limit=25`);
+  },
+  lotReport(lotNumber: string): Promise<LotReport> {
+    return getJson(`/lots/${encodeURIComponent(lotNumber)}/report`);
   },
 };

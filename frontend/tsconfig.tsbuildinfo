@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/nav.ts","./src/api/client.ts","./src/api/types.ts","./src/components/buildtree.tsx","./src/components/serialsearch.tsx","./src/components/tree.ts","./src/pages/lotview.tsx","./src/pages/serialview.tsx"],"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/nav.ts","./src/api/client.ts","./src/api/types.ts","./src/components/buildtree.tsx","./src/components/search.tsx","./src/components/tree.ts","./src/pages/lotview.tsx","./src/pages/serialview.tsx"],"version":"5.9.3"}

@@ -91,10 +91,41 @@ body {
 /* ---- Search ----------------------------------------------------------- */
 .search {
   position: relative;
-  width: 360px;
+  width: 420px;
+  display: flex;
+  gap: 6px;
+}
+.seg {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.seg button {
+  border: none;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 11px;
+  padding: 0 9px;
+  cursor: pointer;
+}
+.seg button.seg__on {
+  background: var(--accent);
+  color: #fff;
+}
+.search__flags {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: flex-end;
+}
+.ok-dot {
+  color: var(--ok-fg);
+  font-size: 10px;
 }
 .search__input {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   padding: 5px 9px;
   border: 1px solid var(--border);
   border-radius: 3px;
@@ -397,4 +428,101 @@ body {
 }
 .link:hover {
   text-decoration: underline;
+}
+
+/* ---- Lot view: blast radius ------------------------------------------- */
+.blast {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--fail-fg);
+  border-radius: 3px;
+  background: var(--fail-bg);
+  margin-bottom: 10px;
+}
+.blast__num {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--fail-fg);
+  font-variant-numeric: tabular-nums;
+}
+.blast__label {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.blast__sub {
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.blast__lot {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+/* ---- Lot view: quality context --------------------------------------- */
+.quality {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1.6fr 0.7fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  margin-bottom: 14px;
+}
+.quality--alert {
+  border-left: 4px solid var(--fail-fg);
+}
+.quality__cell {
+  background: var(--bg);
+  padding: 8px 10px;
+}
+.quality__h {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.quality__insp,
+.quality__nc {
+  margin-bottom: 4px;
+}
+.quality__notes {
+  color: var(--muted);
+  font-size: 11px;
+  white-space: normal;
+  margin-top: 2px;
+}
+.quality__ref {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ---- Lot view: work-order groups ------------------------------------- */
+.wogroup {
+  margin-bottom: 14px;
+}
+.wogroup__head {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 4px 2px;
+}
+.ustatus {
+  color: var(--ok-fg);
+  font-size: 11px;
 }
