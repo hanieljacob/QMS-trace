@@ -61,6 +61,8 @@ class ConsumedLot(BaseModel):
     """The supplier lot consumed at a component position, with its quality context."""
 
     lot_number: Optional[str] = None
+    part_number: Optional[str] = None
+    part_name: Optional[str] = None
     supplier_name: Optional[str] = None
     received_at: Optional[datetime.date] = None
     certificate_status: str = Field(description="'present' or 'absent'")
@@ -106,6 +108,8 @@ def _nc(nc: "g.NCView") -> NonconformanceView:
 def _lot(lot: "g.LotView") -> ConsumedLot:
     return ConsumedLot(
         lot_number=lot.lot_number,
+        part_number=lot.part_number,
+        part_name=lot.part_name,
         supplier_name=lot.supplier_name,
         received_at=lot.received_at,
         certificate_status=lot.certificate_status,

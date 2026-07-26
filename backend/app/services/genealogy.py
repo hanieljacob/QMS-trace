@@ -69,6 +69,8 @@ class LotView:
 
     lot_id: int
     lot_number: Optional[str]
+    part_number: Optional[str]
+    part_name: Optional[str]
     supplier_name: Optional[str]
     received_at: Optional[datetime.date]
     certificate_status: str  # "present" | "absent" | "unknown"
@@ -251,9 +253,12 @@ def _lot_view(session: Session, lot: "m.SupplierLot") -> LotView:
             select(m.Nonconformance).where(m.Nonconformance.supplier_lot_id == lot.id)
         )
     ]
+    part = session.get(m.Part, lot.part_id)
     return LotView(
         lot_id=lot.id,
         lot_number=lot.lot_number,
+        part_number=part.part_number if part else None,
+        part_name=part.name if part else None,
         supplier_name=lot.supplier_name,
         received_at=lot.received_at,
         certificate_status="present" if certs else "absent",
