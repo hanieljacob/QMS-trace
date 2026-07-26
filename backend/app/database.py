@@ -26,3 +26,11 @@ def _enable_sqlite_foreign_keys(dbapi_connection, connection_record) -> None:
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
+
+
+# Install the append-only audit + immutability enforcement on every Session.
+# Imported here, at the bottom, so that simply using the database wires in the
+# guarantees — no application code has to remember to enable them.
+from app.services import audit as _audit  # noqa: E402
+
+_audit.register()

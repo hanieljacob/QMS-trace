@@ -17,6 +17,7 @@ from app.models.enums import (
 from app.models.nonconformance import Nonconformance
 from app.models.part import BomLine, Part
 from app.models.serial import AsBuiltComponent, AsBuiltSerialRecord
+from app.models.signature import ElectronicSignature
 from app.models.supplier_lot import (
     CertificateOfConformance,
     IncomingInspection,
@@ -31,6 +32,7 @@ __all__ = [
     "AuditEvent",
     "BomLine",
     "CertificateOfConformance",
+    "ElectronicSignature",
     "IncomingInspection",
     "Nonconformance",
     "NonconformanceStatus",

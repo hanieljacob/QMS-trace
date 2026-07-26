@@ -47,8 +47,12 @@ class NonconformanceStatus(str, enum.Enum):
 
 
 class AuditAction(str, enum.Enum):
-    """The kind of write an audit event records."""
+    """The kind of write an audit event records.
 
-    create = "create"
+    A soft-void is just an ``update`` that sets the void columns, so there is no
+    separate delete/void action — the append-only trail treats it like any other
+    field change.
+    """
+
+    insert = "insert"
     update = "update"
-    void = "void"
