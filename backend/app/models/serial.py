@@ -57,7 +57,7 @@ class AsBuiltComponent(TimestampMixin, SoftVoidMixin, Base):
     """What was actually consumed at one component position of a built unit.
 
     Each row ties a parent serial's position to *either* a supplier lot (a
-    purchased component) *or* a child serial (a serialized sub-assembly) — never
+    purchased component) *or* a child serial (a serialized sub-assembly), never
     both, never neither. This dual link is what makes the trace work in both
     directions and to any BOM depth.
     """

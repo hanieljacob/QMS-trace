@@ -16,7 +16,7 @@ class Nonconformance(TimestampMixin, SoftVoidMixin, Base):
     """A recorded deviation from specification.
 
     A nonconformance attaches to *either* a supplier lot *or* a single as-built
-    serial — exactly one of the two — so it always has a clear subject in the
+    serial, exactly one of the two, so it always has a clear subject in the
     trace.
     """
 

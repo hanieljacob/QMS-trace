@@ -182,7 +182,7 @@ def _collect_nonconformances(
         elif nc.serial_id is not None:
             subject = f"Serial {serial_number_by_id.get(nc.serial_id) or nc.serial_id}"
         else:
-            subject = "—"
+            subject = "-"
         entries.append(NCEntry(
             nc_number=nc.nc_number,
             status=nc.status.value if nc.status else "",

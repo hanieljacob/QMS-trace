@@ -4,11 +4,11 @@ This wires two ``Session`` events so that the audit trail and record
 immutability are properties of *the session itself*, not of remembering to call
 a helper:
 
-* ``before_flush`` — inspects everything about to be written. It blocks hard
+* ``before_flush``, inspects everything about to be written. It blocks hard
   deletes, blocks modification of append-only records (audit events, signatures)
   and of signed inspections, and requires a reason on every update. It captures
   the field-level changes.
-* ``after_flush`` — once primary keys are assigned, it writes one append-only
+* ``after_flush``, once primary keys are assigned, it writes one append-only
   ``audit_event`` row per changed field, via a Core insert (which does not
   re-enter the ORM unit of work, so there is no recursion).
 
@@ -22,7 +22,7 @@ Inserts do not require a reason; their actor falls back to the row's own
 ``created_by`` if none is set on the session.
 
 Known boundary: this covers the ORM unit of work. A deliberate Core
-``UPDATE``/``INSERT`` statement bypasses these events — which is exactly why
+``UPDATE``/``INSERT`` statement bypasses these events, which is exactly why
 signed records also carry an independent integrity hash (see
 ``app.services.esignature``).
 """
@@ -138,7 +138,7 @@ def _guard_immutable(session: Session, obj) -> None:
 # --------------------------------------------------------------------------- #
 
 def _before_flush(session: Session, flush_context, instances) -> None:
-    # No hard deletes anywhere — records are voided, never removed.
+    # No hard deletes anywhere, records are voided, never removed.
     if session.deleted:
         names = ", ".join(sorted({o.__tablename__ for o in session.deleted}))
         raise AuditError(
@@ -217,9 +217,9 @@ def _enable_active_history(*_args) -> None:
 
     Without this, SQLAlchemy discards the committed value on assignment (unless
     it happens to be loaded), and the audit trail would record ``old_value`` as
-    null. This runs on the ``after_configured`` mapper event — after all models
+    null. This runs on the ``after_configured`` mapper event, after all models
     are imported and configured, but before the first attribute assignment on a
-    loaded object — which is where ``active_history`` has to be in place.
+    loaded object, which is where ``active_history`` has to be in place.
     """
     for mapper in m.AuditEvent.registry.mappers:
         class_manager = mapper.class_manager
@@ -233,7 +233,7 @@ _REGISTERED = False
 def register() -> None:
     """Install the audit/immutability listeners on every ``Session`` (idempotent).
 
-    Safe to call at import time: nothing here touches model classes eagerly —
+    Safe to call at import time: nothing here touches model classes eagerly.
     ``_enable_active_history`` runs later, on ``after_configured``.
     """
     global _REGISTERED

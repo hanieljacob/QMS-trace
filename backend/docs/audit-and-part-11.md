@@ -3,7 +3,7 @@
 This project keeps an append-only audit trail of every change and supports
 electronic signatures on inspection sign-off. This note explains how those
 features line up with FDA **21 CFR Part 11** (electronic records / electronic
-signatures) — and, just as importantly, where this demo deliberately does *not*
+signatures), and, just as importantly, where this demo deliberately does *not*
 meet Part 11 so no one mistakes it for a validated system.
 
 ## How it works, in one paragraph
@@ -13,12 +13,12 @@ Audit and immutability are enforced at the SQLAlchemy **session** level
 hard deletes, blocks changes to append-only records (audit events, signatures)
 and to signed inspections, and refuses any update that lacks a reason for
 change. An `after_flush` listener then writes one `audit_event` row per changed
-field — table, record id, field, old value, new value, actor, timestamp, and
+field, table, record id, field, old value, new value, actor, timestamp, and
 (on updates) the reason. Because this lives on the session, no application code
 can forget to call it. Electronic signatures (`app/services/esignature.py`)
 store the signer, the meaning of the signature, the time, and a SHA-256 hash
-over the signed record; verifying recomputes the hash, so any later change —
-even one made with raw SQL — breaks the signature.
+over the signed record; verifying recomputes the hash, so any later change,
+even one made with raw SQL, breaks the signature.
 
 ## Mapping to Part 11 expectations
 
@@ -26,7 +26,7 @@ even one made with raw SQL — breaks the signature.
 |---|---|---|
 | **§11.10(e)** | Computer-generated, time-stamped audit trails for record create/modify actions; changes must not obscure prior values; retain the trail. | `audit_event` is generated automatically at the session level, timestamped, with `old_value` **and** `new_value` (prior values preserved, never overwritten). Rows are append-only. |
 | **§11.10(e)** | Reason for change recorded on modifications. | Updates are rejected unless a reason is supplied (`audit_context(..., reason=...)`); the reason is stored on every update audit row. |
-| **§11.10(c)** | Protection of records to enable accurate retrieval throughout retention. | No hard deletes anywhere — deletion is a soft-void *state* and is itself an audited update. Audit and signature rows cannot be modified. |
+| **§11.10(c)** | Protection of records to enable accurate retrieval throughout retention. | No hard deletes anywhere, deletion is a soft-void *state* and is itself an audited update. Audit and signature rows cannot be modified. |
 | **§11.10(a)** | Validation of systems to ensure accuracy and reliability. | Behavior is pinned by tests: an update cannot land without an audit event or without a reason; a signed inspection cannot be silently modified (`tests/test_audit.py`). |
 | **§11.10(b)** | Ability to generate accurate, complete copies of records. | The genealogy traversals assemble the full device history record for a serial and the complete where-used list for a lot (`app/services/genealogy.py`). |
 | **§11.50** | Signed records show the signer's name, the date/time, and the meaning of the signature. | `electronic_signature` stores `signer_name`, `signed_at`, and `meaning`. |
@@ -44,10 +44,10 @@ This is a demonstration app, not a compliant QMS. Notably:
 - **Enforcement covers the ORM unit of work, not raw SQL.** A deliberate Core
   `UPDATE`/`INSERT` bypasses the session listeners (and therefore the audit
   trail). That is exactly why signed records carry an independent integrity
-  hash — so tampering below the ORM is still *detectable* even though it is not
+  hash, so tampering below the ORM is still *detectable* even though it is not
   *prevented*. A production system would also restrict database-level write
   access.
-- **No operational controls** — training records, SOPs, records retention/
+- **No operational controls**, training records, SOPs, records retention/
   archival policy, system validation lifecycle, and periodic review are out of
   scope.
 

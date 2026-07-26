@@ -116,17 +116,17 @@ function TreeRow({
           )}
           {row.position && <span className="pos">{row.position}</span>}
           <span className="part">
-            <span className="mono">{row.node.part_number ?? "—"}</span>
+            <span className="mono">{row.node.part_number ?? "-"}</span>
             <span className="part__name">{row.node.part_name}</span>
           </span>
           {row.node.is_cycle && <span className="chip chip--warn">CYCLE</span>}
         </td>
         <td>
-          <span className="mono strong">{row.node.serial_number ?? "—"}</span>
+          <span className="mono strong">{row.node.serial_number ?? "-"}</span>
           <span className="sub mono">{row.node.work_order_number}</span>
         </td>
-        <td className="muted">—</td>
-        <td className="muted">—</td>
+        <td className="muted">-</td>
+        <td className="muted">-</td>
         <td className="grid__status">
           {isOpen ? (
             <>
@@ -174,15 +174,15 @@ function TreeRow({
         <span className="caret caret--none" />
         {row.position && <span className="pos">{row.position}</span>}
         <span className="part">
-          <span className="mono">{lot.part_number ?? "—"}</span>
+          <span className="mono">{lot.part_number ?? "-"}</span>
           <span className="part__name">{lot.part_name}</span>
         </span>
       </td>
       <td>
-        <span className="mono">{lot.lot_number ?? "—"}</span>
+        <span className="mono">{lot.lot_number ?? "-"}</span>
         <span className="sub muted">rcvd {fmtDate(lot.received_at)}</span>
       </td>
-      <td className="supplier">{lot.supplier_name ?? "—"}</td>
+      <td className="supplier">{lot.supplier_name ?? "-"}</td>
       <td>
         {lot.certificate_status === "present" ? (
           <span className="coc coc--ok">CoC ✓</span>

@@ -1,4 +1,4 @@
-"""Genealogy traversals — the two queries qmstrace exists to answer.
+"""Genealogy traversals, the two queries qmstrace exists to answer.
 
 Pure functions over a SQLAlchemy ``Session``; no web framework, no request or
 response objects. Each returns plain dataclasses so callers (an API layer, a
@@ -6,21 +6,21 @@ CLI, a test) can shape the output however they like.
 
 Two traversals, mapped to the CLAUDE.md vocabulary:
 
-* :func:`serial_genealogy` — given a serial number, walk *down* the as-built
+* :func:`serial_genealogy`, given a serial number, walk *down* the as-built
   tree to every component position, the lot consumed there, and that lot's
   supplier / certificate / inspection / nonconformance. This assembles the
   device history record (CLAUDE.md "forward trace").
-* :func:`lot_where_used` — given a supplier lot, walk *up* to every serial that
+* :func:`lot_where_used`, given a supplier lot, walk *up* to every serial that
   consumed it at any depth, with the work order and build date for each
   (CLAUDE.md "backward trace").
 
 Both are defensive about two kinds of bad data:
 
-* **Cycles** — an as-built graph should never contain one, but if a serial ends
+* **Cycles**, an as-built graph should never contain one, but if a serial ends
   up (transitively) consuming itself, traversal stops instead of looping
   forever. Downward it is flagged as ``is_cycle``; upward the visited-set simply
   refuses to re-expand a node.
-* **Orphan references** — a component pointing at a lot or serial row that is
+* **Orphan references**, a component pointing at a lot or serial row that is
   not there (or a missing part / work order / bom line) is reported as an
   ``orphan`` / ``None`` field rather than raising.
 """
@@ -85,7 +85,7 @@ class ComponentNode:
     """One component position of a built unit and what filled it.
 
     ``kind`` is ``"lot"`` (``lot`` set), ``"serial"`` (``child`` set), or
-    ``"orphan"`` (neither — a dangling or malformed reference, see ``note``).
+    ``"orphan"`` (neither, a dangling or malformed reference, see ``note``).
     """
 
     kind: str
@@ -154,7 +154,7 @@ def serial_genealogy(session: Session, serial_number: str) -> SerialNode:
     """Return the complete as-built tree rooted at ``serial_number``.
 
     The whole subtree is bulk-loaded up front (a fixed handful of queries), then
-    the tree is assembled in memory — so a deep, wide build history costs the
+    the tree is assembled in memory, so a deep, wide build history costs the
     same few round trips as a shallow one, not one query per node.
 
     Raises ``LookupError`` if no such serial exists.
@@ -370,8 +370,8 @@ def lot_where_used(session: Session, lot_number: str) -> LotUsage:
         )
     )
 
-    # Walk upward one BOM level at a time — one query per level, not one per node
-    # — so the whole traversal is a handful of round trips regardless of fan-out.
+    # Walk upward one BOM level at a time, one query per level, not one per node
+    #, so the whole traversal is a handful of round trips regardless of fan-out.
     # ``depth_by_id`` doubles as the visited set, so a cycle can never re-expand.
     depth_by_id: dict[int, int] = {sid: 0 for sid in direct_ids}
     frontier = set(direct_ids)

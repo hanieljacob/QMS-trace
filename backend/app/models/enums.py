@@ -50,7 +50,7 @@ class AuditAction(str, enum.Enum):
     """The kind of write an audit event records.
 
     A soft-void is just an ``update`` that sets the void columns, so there is no
-    separate delete/void action — the append-only trail treats it like any other
+    separate delete/void action, the append-only trail treats it like any other
     field change.
     """
 

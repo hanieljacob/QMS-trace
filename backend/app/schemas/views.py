@@ -1,8 +1,8 @@
 """Pydantic response models shaped for the frontend views.
 
 These intentionally do **not** mirror the database tables. They present the
-domain the way the traceability screens consume it — a build tree, a recall
-scope, a nonconformance list, a signature receipt, an audit trail — and are
+domain the way the traceability screens consume it, a build tree, a recall
+scope, a nonconformance list, a signature receipt, an audit trail, and are
 built from the plain results returned by the service layer.
 """
 
@@ -164,7 +164,7 @@ class AffectedSerial(BaseModel):
 
 
 class RecallScope(BaseModel):
-    """Everything a supplier lot reached — the blast radius for a recall."""
+    """Everything a supplier lot reached, the blast radius for a recall."""
 
     lot_number: Optional[str] = None
     supplier_name: Optional[str] = None
@@ -172,7 +172,7 @@ class RecallScope(BaseModel):
     direct_consumers: int = Field(description="Serials that consumed the lot directly.")
     max_depth: int
     finished_devices: list[str] = Field(
-        description="Serial numbers of affected finished devices — the units that shipped or would ship."
+        description="Serial numbers of affected finished devices, the units that shipped or would ship."
     )
     affected_serials: list[AffectedSerial] = []
 
@@ -279,7 +279,7 @@ class LotReport(BaseModel):
     inspections: list[InspectionResultView] = []
     nonconformances: list[NonconformanceView] = []
 
-    # Blast radius — the headline number.
+    # Blast radius, the headline number.
     blast_radius: int = Field(description="Total distinct units that consumed this lot at any depth.")
     direct_consumers: int
     finished_device_count: int

@@ -2,7 +2,7 @@
 
 The signature captures *who* signed, the *meaning* of the signature, *when*, and
 a SHA-256 hash over the signed record's content. Verifying recomputes the hash
-and compares — any later change to the record (even one that bypassed the ORM)
+and compares, any later change to the record (even one that bypassed the ORM)
 shows up as a mismatch.
 """
 
@@ -74,7 +74,7 @@ def signoff_inspection(
     signer_name: str,
     meaning: str,
 ) -> "m.ElectronicSignature":
-    """Look up an inspection and sign it off (no commit — the caller commits).
+    """Look up an inspection and sign it off (no commit, the caller commits).
 
     Raises ``LookupError`` if the inspection does not exist and
     ``AlreadySignedError`` if it has already been signed.

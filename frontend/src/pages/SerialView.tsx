@@ -40,8 +40,8 @@ export function SerialView({ serialNumber }: { serialNumber: string }) {
           </span>
         </div>
         <div className="unithead__meta">
-          <span>work order <b className="mono">{tree.work_order_number ?? "—"}</b></span>
-          <span>built <b>{tree.built_at ? tree.built_at.slice(0, 10) : "—"}</b></span>
+          <span>work order <b className="mono">{tree.work_order_number ?? "-"}</b></span>
+          <span>built <b>{tree.built_at ? tree.built_at.slice(0, 10) : "-"}</b></span>
         </div>
         <div className="unithead__flags">
           {alert ? (

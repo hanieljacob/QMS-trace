@@ -20,8 +20,8 @@ router = APIRouter(tags=["nonconformances"])
     response_model=list[NonconformanceListItem],
     summary="List nonconformances",
     description=(
-        "List recorded nonconformances — deviations raised against a supplier lot "
-        "or a single serial — with the subject resolved to its lot or serial "
+        "List recorded nonconformances, deviations raised against a supplier lot "
+        "or a single serial, with the subject resolved to its lot or serial "
         "number. Optionally filter by disposition status."
     ),
 )

@@ -5,7 +5,7 @@ the ``Session`` class, so they apply to any session). The key proofs:
 
 * an update cannot land without producing an audit event, and cannot land at all
   without a reason;
-* an electronically signed inspection cannot be silently modified — the ORM path
+* an electronically signed inspection cannot be silently modified, the ORM path
   is blocked, and a Core-level tamper is caught by the integrity hash.
 """
 

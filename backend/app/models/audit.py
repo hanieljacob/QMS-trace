@@ -1,12 +1,12 @@
 """Append-only audit trail.
 
 Every insert and update anywhere in the app writes one audit event *per changed
-field* — table, record id, field, old value, new value, actor, and timestamp,
+field*, table, record id, field, old value, new value, actor, and timestamp,
 plus a reason for change that is mandatory on updates. Rows are written
 automatically at the session level (see ``app.services.audit``) so no code path
 can forget to record a change.
 
-This table is deliberately the one place with no ``SoftVoidMixin`` — audit
+This table is deliberately the one place with no ``SoftVoidMixin``, audit
 events are immutable and are never updated or deleted.
 """
 

@@ -43,7 +43,7 @@ CELL_MONO = ParagraphStyle("dhrCellMono", parent=CELL, fontName="Courier")
 
 def _fmt_dt(value) -> str:
     if value is None:
-        return "—"
+        return "-"
     if isinstance(value, datetime.datetime):
         return value.strftime("%Y-%m-%d %H:%M UTC")
     if isinstance(value, datetime.date):
@@ -54,7 +54,7 @@ def _fmt_dt(value) -> str:
 def _fmt_date(value) -> str:
     if isinstance(value, (datetime.datetime, datetime.date)):
         return value.strftime("%Y-%m-%d")
-    return "—"
+    return "-"
 
 
 class _NumberedCanvas(canvas.Canvas):
@@ -95,7 +95,7 @@ def _canvas_maker(footer_left: str):
 
 
 def _p(text, style=CELL) -> Paragraph:
-    return Paragraph(text if text not in (None, "") else "—", style)
+    return Paragraph(text if text not in (None, "") else "-", style)
 
 
 # --------------------------------------------------------------------------- #
@@ -108,7 +108,7 @@ def _header_block(doc: DHRDocument, story: list) -> None:
     data = [
         [_p("<b>Serial number</b>"), _p(doc.serial_number, CELL_MONO),
          _p("<b>Work order</b>"), _p(doc.work_order_number, CELL_MONO)],
-        [_p("<b>Part</b>"), _p(f"{doc.part_number or '—'} — {doc.part_name or ''}"),
+        [_p("<b>Part</b>"), _p(f"{doc.part_number or '-'}, {doc.part_name or ''}"),
          _p("<b>Build date</b>"), _p(_fmt_date(doc.built_at))],
     ]
     table = Table(data, colWidths=[1.1 * inch, 2.6 * inch, 1.0 * inch, 2.3 * inch])
@@ -152,13 +152,13 @@ def _genealogy_section(doc: DHRDocument, story: list) -> None:
             node: SerialNode = payload
             open_ncs = [nc for nc in node.nonconformances if nc.status == "open"]
             status = "OPEN NC" if open_ncs else ""
-            part_cell = f"{indent}<b>{node.part_number or '—'}</b> {node.part_name or ''}"
+            part_cell = f"{indent}<b>{node.part_number or '-'}</b> {node.part_name or ''}"
             data.append([
                 _p(position, CELL_MONO), _p(part_cell),
-                _p(f"<b>{node.serial_number or '—'}</b>", CELL_MONO),
-                _p("—"), _p("—"),
-                _p(f'<font color="#b3261e"><b>{status}</b></font>' if status else "—"),
-                _p("—"),
+                _p(f"<b>{node.serial_number or '-'}</b>", CELL_MONO),
+                _p("-"), _p("-"),
+                _p(f'<font color="#b3261e"><b>{status}</b></font>' if status else "-"),
+                _p("-"),
             ])
             if status:
                 styles_extra.append(("TEXTCOLOR", (0, i), (0, i), RED))
@@ -176,18 +176,18 @@ def _genealogy_section(doc: DHRDocument, story: list) -> None:
             coc = "present" if lot and lot.certificate_status == "present" else "ABSENT"
             data.append([
                 _p(position, CELL_MONO),
-                _p(f"{indent}{(lot.part_number if lot else '—') or '—'} {(lot.part_name if lot else '') or ''}"),
-                _p(lot.lot_number if lot else "—", CELL_MONO),
-                _p(lot.supplier_name if lot else "—"),
+                _p(f"{indent}{(lot.part_number if lot else '-') or '-'} {(lot.part_name if lot else '') or ''}"),
+                _p(lot.lot_number if lot else "-", CELL_MONO),
+                _p(lot.supplier_name if lot else "-"),
                 _p(coc if coc == "present" else f'<font color="#8a5a00"><b>{coc}</b></font>'),
-                _p(" ".join(flags) if flags else "—"),
-                _p(str(payload.quantity) if payload.quantity is not None else "—"),
+                _p(" ".join(flags) if flags else "-"),
+                _p(str(payload.quantity) if payload.quantity is not None else "-"),
             ])
         else:  # orphan
             data.append([
                 _p(position, CELL_MONO), _p(f"{indent}<i>missing reference</i>"),
-                _p("—"), _p("—"), _p("—"),
-                _p(f'<font color="#b3261e">{payload.note or "orphan"}</font>'), _p("—"),
+                _p("-"), _p("-"), _p("-"),
+                _p(f'<font color="#b3261e">{payload.note or "orphan"}</font>'), _p("-"),
             ])
 
     table = Table(
@@ -216,7 +216,7 @@ def _inspections_section(doc: DHRDocument, story: list) -> None:
     header = ["Lot", "Part", "Supplier", "Disposition", "Inspected", "Electronic signature"]
     data = [header]
     for e in doc.inspections:
-        disp = e.disposition or "—"
+        disp = e.disposition or "-"
         disp_cell = (
             f'<font color="#b3261e"><b>{disp.upper()}</b></font>'
             if disp == "rejected" else disp
@@ -227,16 +227,16 @@ def _inspections_section(doc: DHRDocument, story: list) -> None:
                 mark = ('<font color="#2f7d32">VERIFIED</font>' if s.verified
                         else '<font color="#b3261e">HASH MISMATCH</font>')
                 sig_bits.append(
-                    f"<b>{s.signer_name}</b> — “{s.meaning}”<br/>"
+                    f"<b>{s.signer_name}</b>, “{s.meaning}”<br/>"
                     f"{_fmt_dt(s.signed_at)} · {mark}<br/>"
                     f'<font color="#6b7280" size="6">sha256 {s.record_hash[:24]}…</font>'
                 )
             sig_cell = "<br/><br/>".join(sig_bits)
         else:
-            sig_cell = '<font color="#6b7280"><i>— unsigned —</i></font>'
+            sig_cell = '<font color="#6b7280"><i>unsigned</i></font>'
         data.append([
             _p(e.lot_number, CELL_MONO),
-            _p(f"{e.part_number or '—'} {e.part_name or ''}"),
+            _p(f"{e.part_number or '-'} {e.part_name or ''}"),
             _p(e.supplier_name),
             _p(disp_cell),
             _p(_fmt_date(e.inspected_at)),
@@ -298,7 +298,7 @@ def render_dhr_pdf(doc: DHRDocument) -> bytes:
     pdf = SimpleDocTemplate(
         buffer, pagesize=letter,
         leftMargin=MARGIN, rightMargin=MARGIN, topMargin=MARGIN, bottomMargin=0.8 * inch,
-        title=f"Device History Record — {doc.serial_number}",
+        title=f"Device History Record, {doc.serial_number}",
         author="qmstrace",
     )
     story: list = []

@@ -7,13 +7,13 @@ Run it (from anywhere) to rebuild the demo database from scratch:
 
 What "from scratch" and "idempotent" mean here:
 
-* The script REBUILDS the demo database — it drops and recreates every table
+* The script REBUILDS the demo database, it drops and recreates every table
   through Alembic (downgrade base -> upgrade head), then repopulates. That reset
   is a developer fixture tool operating on the throwaway demo SQLite file. It is
   NOT an application data path; the app itself still never hard-deletes domain
   records (see CLAUDE.md).
 * Data generation is deterministic (fixed RNG seed) and the schema is rebuilt
-  every run, so each run yields the same logical dataset — rerunning is safe and
+  every run, so each run yields the same logical dataset, rerunning is safe and
   produces identical results.
 
 Two lots are deliberately contaminated so the demo has something to chase:

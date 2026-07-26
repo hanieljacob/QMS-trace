@@ -1,0 +1,6 @@
+# Runtime dependencies for the Lambda package. Intentionally excludes uvicorn
+# (no server needed) and alembic (the DB is pre-seeded, not migrated on Lambda).
+fastapi>=0.110
+SQLAlchemy>=2.0
+reportlab>=4.0
+mangum>=0.17

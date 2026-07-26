@@ -18,7 +18,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 
 class TimestampMixin:
-    """``created_at`` / ``created_by`` — mandatory on every table."""
+    """``created_at`` / ``created_by``, mandatory on every table."""
 
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

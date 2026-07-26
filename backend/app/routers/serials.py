@@ -23,7 +23,7 @@ router = APIRouter(tags=["serials"])
     summary="Search as-built serial records",
     description=(
         "Find built units by serial number, part number, part name, or work "
-        "order. Each result is one as-built serial record — a physical unit that "
+        "order. Each result is one as-built serial record, a physical unit that "
         "was produced against a work order."
     ),
 )
@@ -45,7 +45,7 @@ def search_serials(
         "Return the complete device history record for one serial number: every "
         "component position, the supplier lot consumed there (with its supplier, "
         "certificate of conformance status, incoming inspection result, and any "
-        "nonconformance), and — for serialized sub-assemblies — the child unit's "
+        "nonconformance), and, for serialized sub-assemblies, the child unit's "
         "own genealogy, all the way down."
     ),
 )
@@ -66,7 +66,7 @@ def get_serial_genealogy(
         "Generate the auditor-facing Device History Record for one serial: a "
         "header (serial, part, work order, build date), the full as-built "
         "genealogy, incoming inspection results with electronic signatures, and "
-        "nonconformances — with a generation timestamp and page numbers."
+        "nonconformances, with a generation timestamp and page numbers."
     ),
     responses={200: {"content": {"application/pdf": {}}, "description": "The DHR PDF."}},
     response_class=Response,

@@ -1,6 +1,6 @@
 """Model package.
 
-Importing this package registers every table on ``Base.metadata`` — Alembic and
+Importing this package registers every table on ``Base.metadata``, Alembic and
 ``create_all`` both rely on that side effect.
 """
 

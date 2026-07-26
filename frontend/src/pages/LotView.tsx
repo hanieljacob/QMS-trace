@@ -4,7 +4,7 @@ import type { LotReport } from "../api/types";
 import { useNav } from "../nav";
 
 function fmtDate(iso: string | null): string {
-  return iso ? iso.slice(0, 10) : "—";
+  return iso ? iso.slice(0, 10) : "-";
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -44,7 +44,7 @@ export function LotView({ lotNumber }: { lotNumber: string }) {
 
   return (
     <section>
-      {/* Blast radius — the headline number. */}
+      {/* Blast radius, the headline number. */}
       <div className="blast">
         <div className="blast__num">{report.blast_radius}</div>
         <div className="blast__label">
@@ -57,7 +57,7 @@ export function LotView({ lotNumber }: { lotNumber: string }) {
         <div className="blast__lot">
           <span className="mono big">{report.lot_number}</span>
           <span className="muted">
-            {report.part_number} · {report.part_name} — {report.supplier_name}
+            {report.part_number} · {report.part_name}, {report.supplier_name}
           </span>
         </div>
       </div>
@@ -110,7 +110,7 @@ export function LotView({ lotNumber }: { lotNumber: string }) {
         <div className="quality__cell">
           <div className="quality__h">Received</div>
           <div>{fmtDate(report.received_at)}</div>
-          <div className="muted">qty {report.quantity_received ?? "—"}</div>
+          <div className="muted">qty {report.quantity_received ?? "-"}</div>
         </div>
       </div>
 
@@ -141,11 +141,11 @@ export function LotView({ lotNumber }: { lotNumber: string }) {
                         {u.serial_number}
                       </button>
                     ) : (
-                      <span className="muted">— orphan —</span>
+                      <span className="muted">orphan</span>
                     )}
                   </td>
                   <td>
-                    <span className="mono">{u.part_number ?? "—"}</span>
+                    <span className="mono">{u.part_number ?? "-"}</span>
                     <span className="part__name">{u.part_name}</span>
                     {u.is_finished_device && <span className="chip chip--fail">FINISHED DEVICE</span>}
                   </td>

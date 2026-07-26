@@ -88,7 +88,7 @@ def search_lots(
     """Find supplier lots by lot number, supplier, or part, with quality flags.
 
     Quality context (latest inspection, CoC presence, open-NC count) is gathered
-    in a fixed number of grouped queries — never one per lot.
+    in a fixed number of grouped queries, never one per lot.
     """
     stmt = (
         select(m.SupplierLot)
@@ -152,7 +152,7 @@ def search_lots(
 
 
 # --------------------------------------------------------------------------- #
-# Lot report (the lot view — one call, everything the screen needs)
+# Lot report (the lot view, one call, everything the screen needs)
 # --------------------------------------------------------------------------- #
 
 @dataclass
@@ -273,7 +273,7 @@ def lot_report(session: Session, lot_number: str) -> LotReport:
             status=status,
             is_finished_device=(c.part_type == "finished_device"),
         )
-        groups.setdefault(c.work_order_number or "—", []).append(line)
+        groups.setdefault(c.work_order_number or "-", []).append(line)
 
     work_order_groups = [
         WorkOrderGroup(

@@ -9,14 +9,14 @@ manufacturer. Demo application.
 - **Frontend:** React, Vite, TypeScript
 - **Deployment target:** AWS
 
-## Purpose — the two queries this app exists to answer
+## Purpose, the two queries this app exists to answer
 
 Everything in this system is built to serve exactly two lookups. When in
 doubt about a design decision, favor whichever choice makes these two
 queries simpler, faster, or more trustworthy.
 
 1. **Forward trace (serial → history):** Given a **serial number**,
-   return its full build history — every part, supplier lot, work order,
+   return its full build history, every part, supplier lot, work order,
    inspection, certificate, and nonconformance that went into that unit.
 2. **Backward trace (lot → serials):** Given a **supplier lot**, return
    every **serial number** that consumed material from that lot.
@@ -26,28 +26,28 @@ queries simpler, faster, or more trustworthy.
 Use these terms consistently across code, database, API, and UI. Do not
 invent synonyms.
 
-- **Part** — A distinct item that can be stocked, purchased, or built.
+- **Part**, A distinct item that can be stocked, purchased, or built.
   Identified by a part number. May be a raw material, a component, or a
   finished device.
-- **Bill of materials (BOM)** — The list of parts (and quantities)
+- **Bill of materials (BOM)**, The list of parts (and quantities)
   required to build a given parent part.
-- **Supplier lot** — A quantity of a purchased part received from a
+- **Supplier lot**, A quantity of a purchased part received from a
   supplier under a single lot/batch identifier. The unit of incoming
   traceability.
-- **Certificate of conformance (CoC)** — A supplier's documented
+- **Certificate of conformance (CoC)**, A supplier's documented
   attestation that a supplier lot meets its specification. Attached to a
   supplier lot.
-- **Work order** — An authorization and record for building a quantity
+- **Work order**, An authorization and record for building a quantity
   of a part. Consumes supplier lots and/or sub-assemblies and produces
   as-built serial records.
-- **As-built serial record** — The record of a single physical unit
+- **As-built serial record**, The record of a single physical unit
   produced, identified by a serial number, capturing exactly which
   supplier lots and child serials were consumed to build it.
-- **Incoming inspection** — The recorded inspection of a supplier lot on
+- **Incoming inspection**, The recorded inspection of a supplier lot on
   receipt, with a disposition (e.g. accept / reject).
-- **Nonconformance (NC)** — A recorded deviation from specification,
+- **Nonconformance (NC)**, A recorded deviation from specification,
   raised against a part, supplier lot, or serial.
-- **Device history record (DHR)** — The compiled, complete build and
+- **Device history record (DHR)**, The compiled, complete build and
   quality history of a single as-built unit (serial number). This is the
   output of the forward trace.
 

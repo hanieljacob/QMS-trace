@@ -1,4 +1,4 @@
-/* qmstrace — internal quality tool. Density and scan speed over decoration.
+/* qmstrace, internal quality tool. Density and scan speed over decoration.
    Color is reserved almost entirely for status; everything else is neutral. */
 
 :root {
@@ -187,20 +187,61 @@ body {
   padding: 0 0 8px;
   font-size: 12px;
 }
-.empty {
-  color: var(--muted);
-  max-width: 520px;
-  margin-top: 40px;
-}
-.empty__hint {
-  font-size: 12px;
-}
-.empty code,
 .notice code {
   font-family: var(--mono);
   background: var(--panel);
   padding: 1px 4px;
   border-radius: 3px;
+}
+
+/* ---- Home / getting-started hints ------------------------------------- */
+.home {
+  max-width: 860px;
+  margin-top: 24px;
+}
+.home__lead {
+  color: var(--text);
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+.home__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.home__card {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px 16px;
+  background: var(--panel);
+}
+.home__card p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.home__card-h {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.home__try {
+  color: var(--text) !important;
+}
+.home__try .link {
+  font-size: 12px;
+}
+.home__note {
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--mutederer);
+}
+@media (max-width: 720px) {
+  .home__cards {
+    grid-template-columns: 1fr;
+  }
 }
 .notice {
   color: var(--muted);

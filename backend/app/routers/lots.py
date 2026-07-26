@@ -21,9 +21,9 @@ router = APIRouter(tags=["lots"])
     summary="Search supplier lots",
     description=(
         "Find supplier lots by lot number, supplier, or part. Each result carries "
-        "quality flags — latest incoming inspection disposition, whether a "
+        "quality flags, latest incoming inspection disposition, whether a "
         "certificate of conformance is on file, and how many open nonconformances "
-        "it has — so a bad lot stands out before you open it."
+        "it has, so a bad lot stands out before you open it."
     ),
 )
 def search_lots(
@@ -37,7 +37,7 @@ def search_lots(
 @router.get(
     "/lots/{lot_number}/report",
     response_model=LotReport,
-    summary="Full lot report — blast radius, consuming units, and quality context",
+    summary="Full lot report, blast radius, consuming units, and quality context",
     description=(
         "Everything the lot view needs in one call: the lot's incoming inspection "
         "results, certificate of conformance status, and nonconformances, the "
@@ -59,7 +59,7 @@ def get_lot_report(lot_number: str, db: Session = Depends(get_db)) -> LotReport:
     summary="Recall scope for a supplier lot",
     description=(
         "Given a supplier lot, return every serial that consumed it at any depth "
-        "in the bill of materials — the blast radius for a recall — including the "
+        "in the bill of materials, the blast radius for a recall, including the "
         "affected finished devices and each unit's depth below consumption."
     ),
 )

@@ -19,7 +19,7 @@ router = APIRouter(tags=["audit"])
     description=(
         "Return the complete append-only audit trail for one record, oldest "
         "change first: every field-level insert and update with its old and new "
-        "value, the actor, the timestamp, and — for updates — the reason for "
+        "value, the actor, the timestamp, and, for updates, the reason for "
         "change. `table_name` is the record's table (e.g. 'supplier_lot', "
         "'incoming_inspection') and `record_id` its primary key."
     ),

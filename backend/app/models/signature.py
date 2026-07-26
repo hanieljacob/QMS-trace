@@ -3,7 +3,7 @@
 An electronic signature binds a signer, the meaning of their signing, and a
 timestamp to a specific record, together with a hash taken over that record's
 content at the moment of signing. If the underlying record is later changed, the
-stored hash no longer matches — the signature is broken and the tampering is
+stored hash no longer matches, the signature is broken and the tampering is
 detectable.
 
 Like the audit trail, signatures are append-only: no ``SoftVoidMixin``, and the
