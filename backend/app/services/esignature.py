@@ -20,6 +20,10 @@ import app.models as m
 SIGNED_TABLE = "incoming_inspection"
 
 
+class AlreadySignedError(RuntimeError):
+    """The inspection already carries an electronic signature."""
+
+
 def compute_inspection_hash(inspection: "m.IncomingInspection") -> str:
     """SHA-256 over the fields an inspection signature attests to.
 
@@ -62,6 +66,25 @@ def sign_inspection(
     )
     session.add(signature)
     return signature
+
+
+def signoff_inspection(
+    session: Session,
+    inspection_id: int,
+    signer_name: str,
+    meaning: str,
+) -> "m.ElectronicSignature":
+    """Look up an inspection and sign it off (no commit — the caller commits).
+
+    Raises ``LookupError`` if the inspection does not exist and
+    ``AlreadySignedError`` if it has already been signed.
+    """
+    inspection = session.get(m.IncomingInspection, inspection_id)
+    if inspection is None:
+        raise LookupError(f"inspection not found: {inspection_id}")
+    if record_is_signed(session, SIGNED_TABLE, inspection_id):
+        raise AlreadySignedError(f"inspection {inspection_id} is already signed")
+    return sign_inspection(session, inspection, signer_name, meaning)
 
 
 def latest_signature(session: Session, table_name: str, record_id: int):

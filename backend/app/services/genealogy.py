@@ -119,6 +119,7 @@ class LotConsumer:
     serial_number: Optional[str]
     part_number: Optional[str]
     part_name: Optional[str]
+    part_type: Optional[str]
     work_order_number: Optional[str]
     built_at: Optional[datetime.datetime]
     depth: int          # 0 = consumed the lot directly; n = via n levels of sub-assembly
@@ -320,7 +321,7 @@ def lot_where_used(session: Session, lot_number: str) -> LotUsage:
         if rec is None:
             consumers.append(LotConsumer(
                 serial_id=sid, serial_number=None, part_number=None, part_name=None,
-                work_order_number=None, built_at=None, depth=depth,
+                part_type=None, work_order_number=None, built_at=None, depth=depth,
                 direct=(depth == 0), is_orphan=True,
             ))
             continue
@@ -331,6 +332,7 @@ def lot_where_used(session: Session, lot_number: str) -> LotUsage:
             serial_number=rec.serial_number,
             part_number=part.part_number if part else None,
             part_name=part.name if part else None,
+            part_type=part.part_type.value if part and part.part_type else None,
             work_order_number=wo.work_order_number if wo else None,
             built_at=rec.built_at,
             depth=depth,
