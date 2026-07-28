@@ -22,3 +22,6 @@ dist/
 .DS_Store
 .idea/
 .vscode/
+
+# Lambda build artifacts
+deploy/build/
